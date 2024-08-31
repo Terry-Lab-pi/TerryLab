@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terry Lab</title>
+    <style>
+        body {
+            background-color: black;
+            color: green;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            font-size: 6em;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        p {
+            text-align: center;
+            width: 80%;
+            margin-top: 10px;
+            font-size: 2em;
+            color: white;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .button {
+            background-color: #FFD700;
+            /* Color amarillo bonito */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 30px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #FFC107;
+            /* Un tono más oscuro de amarillo */
+        }
+    </style>
+    <script>
+        function disableButton(form) {
+            var button = document.getElementById('measureButton');
+            button.disabled = true;
+            button.innerText = 'Midiendo...';
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Terry Lab</h1>
+    <p>Este es un laboratorio estacionario para el estudio edafológico para la prevención de incendios forestales</p>
+    <div class="button-container">
+        <form action="{{ url_for('measure') }}" method="get" onsubmit="disableButton(this)">
+            <button id="measureButton" class="button" type="submit" >Inicio Medición</button>
+        </form>
+    </div>
+</body>
+
+</html>

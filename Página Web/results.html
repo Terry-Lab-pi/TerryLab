@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terry Lab</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            font-size: 6em;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        p {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 2em;
+            color: white;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: auto;
+            margin-top: 20px;
+            border: rgb(255, 255, 255) 2px solid;
+        }
+
+        th {
+            background-color: #FFD700;
+            color: rgb(0, 0, 0);
+            font-size: 2em;
+            border: rgb(255, 255, 255) 2px solid;
+            text-align: center;
+        }
+
+        td {
+            border: rgb(255, 255, 255) 1px solid;
+            background-color: rgb(61, 57, 57);
+            padding: 5px 10px 5px 10px;
+            font-size: 1.5em;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .button {
+            background-color: #FFD700;
+            /* Color amarillo bonito */
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 20px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #FFC107;
+            /* Un tono más oscuro de amarillo */
+        }
+
+        .nred {
+            color: red;
+        }
+
+        .nyellow {
+            color: yellow;
+        }
+
+        .ngreen {
+            color: green;
+        }
+    </style>
+    <script>
+        function disableButton(form) {
+            var button = document.getElementById('measureButton');
+            button.disabled = true;
+            button.innerText = 'Midiendo...';
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Resultados de Medición</h1>
+   
+    {% if results %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Parámetro</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Humedad</td>
+                    <td class="{% if results.humidity < 15 %}ngreen{% elif results.humidity < 35 %}nyellow{% else %}nred{% endif %}">{{ results.humidity }} %</td>
+                </tr>
+                <tr>
+                    <td>Temperatura</td>
+                    <td class="{% if results.temperature < 23 %}ngreen{% elif results.temperature < 35 %}nyellow{% else %}ngreen{% endif %}">{{ results.temperature }} C</td>
+                </tr>
+                <tr>
+                    <td>Conductividad</td>
+                    <td class="{% if results.conductivity < 200 %}nyellow{% elif results.conductivity < 400 %}ngeen{% else %}nred{% endif %}">{{ results.conductivity }} s/cm</td>
+                </tr>
+                <tr>
+                    <td>PH</td>
+                    <td class="{% if results.ph < 5.5 %}nred{% elif results.ph < 7.5 %}ngreen{% else %}nred{% endif %}">{{ results.ph }}</td>
+                </tr>
+                <tr>
+                    <td>Nitrógeno</td>
+                    <td class="{% if results.nitrogen < 0.05 %}nred{% elif results.nitrogen < 0.1 %}nyellow{% elif results.nitrogen < 2 %}ngreen{% else %}nred{% endif %}">{{ results.nitrogen }} mg/kg</td>
+                </tr>
+                <tr>
+                    <td>Fósforo</td>
+                    <td class="{% if results.phosphorus < 16 %}nred{% elif results.phosphorus < 27 %}nyellow{% elif results.phosphorus < 41 %}ngreen{% else %}nred{% endif %}">{{ results.phosphorus }} mg/kg</td>
+                </tr>
+                <tr>
+                    <td>Potasio</td>
+                    <td class="{% if results.potassium < 0.065 %}nred{% elif results.potassium < 0.13 %}nyellow{% elif results.potassium < 0.26 %}ngreen{% else %}nred{% endif %}">{{ results.potassium }} mg/kg</td>
+                </tr>
+            </tbody>
+        </table>
+
+    {% endif %}
+
+    <div class="button-container">
+        <form action="/">
+            <button id="home" class="button" type="submit" >Inicio</button>
+        </form>
+    </div>
+</body>
+
+</html>
