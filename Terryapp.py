@@ -4,6 +4,7 @@ import RPi.GPIO as GPIO
 from adafruit_servokit import ServoKit
 import time
 from flask import Flask, render_template, request, jsonify
+import sqlite3
 
 # Variables globales
 
@@ -44,6 +45,9 @@ GPIO.setup(stby, GPIO.OUT)
 pwmA = GPIO.PWM(pwma, 1000) # Hz frequency
 pwmA.start(0)
 #####################
+
+# Base de datos
+db = 'terry.db'
 
 
 # Sensor NPK
@@ -179,7 +183,14 @@ def proceso_medicion():
     print("-------------------------")
 
     # Guardar datos en base de datos
-    # ...
+    conn = sqlite3.connect(db)
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO mediciones (FechaHora, Humedad, Temperatura, Conductividad, PH, Nitrogeno, Fosforo, Potasio)
+        VALUES (datetime('now', 'localtime'), ?, ?, ?, ?, ?, ?, ?)
+    ''', (humidity, temperature, conductivity, ph, nitrogen, phosphorus, potassium))
+    conn.commit()
+    conn.close()
 
     results = { "humidity": humidity, "temperature": temperature, "conductivity": conductivity, "ph": ph, "nitrogen": nitrogen, "phosphorus": phosphorus, "potassium": potassium }
 
@@ -187,6 +198,22 @@ def proceso_medicion():
 
 
 # Inicializar base de datos API
+conn = sqlite3.connect(db)
+cursor = conn.cursor()
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS mediciones (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        FechaHora DateTime,
+        Humedad DECIMAL,
+        Temperatura DECIMAL,
+        Conductividad NUMERIC,
+        PH DECIMAL,
+        Nitrogeno NUMERIC,
+        Fosforo NUMERIC,
+        Potasio NUMERIC)
+''')
+conn.commit()
+conn.close()
 
 # Web
 app = Flask(__name__)
